@@ -81,9 +81,9 @@ fine-grained version of SOA.
 
 ### The e-Navigation Service Architecture Overview
 
-An overview of the e-Navigation Service Architecture is presented in Figure 1.
-As already mentioned this follows the IALA G1114 guideline. The DCT
-([VDES Controller](https://github.com/gla-rad/eNav-VDESController),
+An overview of the e-Navigation Service Architecture is presented in the
+following figure. As already mentioned this follows the IALA G1114 guideline.
+The DCT ([VDES Controller](https://github.com/gla-rad/eNav-VDESController),
 [Message Broker](https://github.com/gla-rad/eNav-MessageBroker)),
 VAD ([AtoN Service](https://github.com/gla-rad/eNav-AtonService),
 [AtoN Admin Service](https://github.com/gla-rad/eNav-AtonAdminService)) and UIA
@@ -103,7 +103,7 @@ configuration repository.
 
 ![Figure 1: The e-Navigation Service Architecture Overview](images/enavServiceArchitecture.png)
 
-Figure 1 also illustrates that the “API Gateway” becomes available to the
+The figure also illustrates that the “API Gateway” becomes available to the
 clients via a dedicated web server (nginx). This setup allows the architecture
 to expose a different SSL certificate (not generated via the MCP) and also
 permits higher flexibility where different e-Navigation systems could be served
@@ -151,17 +151,28 @@ to be deployed. You will first need:
 and an
 [Nginx Ingress](https://kubernetes.github.io/ingress-nginx/kubectl-plugin/)
 plugin installed. 
+
 * An operational PostgreSQL server with existing databases installed for the
 following services. Note that since it's a bit complex to suppost persistence
 is every Kuebernetes environment (e.g. on bare-metal deployment) this method
 was seen as preferable:
-** VDES-Controller
-** CKeeper
-** AtoN Service
-** AtoN Admin Service
+
+    * VDES-Controller
+    * CKeeper
+    * AtoN Service
+    * AtoN Admin Service
+
 * A separate [Keycloak](https://www.keycloak.org/) OIDC server. This
 functionality can and probably will be included in the Helm charts in the
 future. The database however, will need to be persisted elsewhere.
+
+* A reachable Git repository to hold and distrubute the service configuration
+from. This will be the configuration repository access by the Eureka service.
+Examples of the configuration files required can be found under the 
+***configuration*** top level directory. Notice that configuration secrets such
+as usernames, passwords as so on, are all encoded and marked with the
+***{cipher}*** prefix. **BE CAREFUL**: This repository much be carefully secured
+as open access would ultimately leak all configuration secrets!
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to
