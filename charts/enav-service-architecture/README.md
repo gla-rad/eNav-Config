@@ -1,7 +1,8 @@
-# eNav-Config
+# enav-service-architecture
 
-A repository that includes the configuration and Helm charts for deploying the
-GLA e-Navigation Service Architecture
+A Helm chart for deploying the GLA e-Navigation Service Architecture
+
+![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
 
 ## What is e-Navigation
 
@@ -37,7 +38,7 @@ of the IMO’s overarching architecture. In addition, in accordance with the IAL
 Guideline G1114, the following services types are defined:
 
 1. A **Data Collection and Data Transfer Service (DCT)** interfacing with the
-shore-based AIS/VDES system to send the specified VAtoN information. 
+shore-based AIS/VDES system to send the specified VAtoN information.
 2. A **Value Added Data Processing Service (VAD)**, that stores and distributes
 the Virtual (but not excluding non-virtual ones) AtoN messages. An additional
 service was also implemented to enable a geospatially-aware publish-subscribe
@@ -101,7 +102,7 @@ other without the need to establish static connections. In addition it allows
 for a very flexible monitoring of the system and optionally a shared
 configuration repository.
 
-![Figure 1: The e-Navigation Service Architecture Overview](images/enavServiceArchitecture.png)
+![Figure 1: The e-Navigation Service Architecture Overview](../../images/enavServiceArchitecture.png)
 
 The figure also illustrates that the “API Gateway” becomes available to the
 clients via a dedicated web server (nginx). This setup allows the architecture
@@ -122,7 +123,7 @@ private, depending on the service provision requirements.
 The current implementation is also enriched with additional functionality that
 supports a
 [Springboot Admin](http://docs.spring-boot-admin.com/current/index.html)
-server for monitoring, as well as the incorporation of the 
+server for monitoring, as well as the incorporation of the
 [Spring Cloud Config](https://spring.io/projects/spring-cloud-config) server
 with Eureka, os that it can support externalized configuration for the involved
 microservices.
@@ -136,7 +137,7 @@ in the top level directory structure:
 * **charts**: Contains the definitions of Helm charts for deploying GLA the
 e-Navigation Service Architecture into Kubernetes environments.
 * **configuration**: This directory includes a set of application property files
-(either as the ***.properties*** or ***.yaml***) that will will be distributes 
+(either as the ***.properties*** or ***.yaml***) that will will be distributes
 to the architecture services by the Eureka service.
 * **images**: Contains a set of images used by the repository.
 
@@ -147,10 +148,10 @@ Kubernetes Helm charts being available, it require a set of preliminary work
 to be deployed. You will first need:
 
 * A functional kubernetes deployment with a
-[Calico CNI](https://docs.tigera.io/calico/latest/getting-started/kubernetes/hardway/install-cni-plugin) 
+[Calico CNI](https://docs.tigera.io/calico/latest/getting-started/kubernetes/hardway/install-cni-plugin)
 and an
 [Nginx Ingress](https://kubernetes.github.io/ingress-nginx/kubectl-plugin/)
-plugin installed. 
+plugin installed.
 
 * An operational PostgreSQL server with existing databases installed for the
 following services. Note that since it's a bit complex to suppost persistence
@@ -168,21 +169,71 @@ future. The database however, will need to be persisted elsewhere.
 
 * A reachable Git repository to hold and distrubute the service configuration
 from. This will be the configuration repository access by the Eureka service.
-Examples of the configuration files required can be found under the 
+Examples of the configuration files required can be found under the
 ***configuration*** top level directory. Notice that configuration secrets such
 as usernames, passwords as so on, are all encoded and marked with the
 ***{cipher}*** prefix. **BE CAREFUL**: This repository much be carefully secured
 as open access would ultimately leak all configuration secrets!
 
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to
-discuss what you would like to change.
+## Values
 
-Please make sure to update tests as appropriate.
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| global.enav_service.cloud_config.branch | string | `"master"` |  |
+| global.enav_service.cloud_config.password | string | `"enav_config_password"` |  |
+| global.enav_service.cloud_config.uri | string | `"http://enav-eureka.enav-service-architecture.svc.k8s:8761/config/"` |  |
+| global.enav_service.cloud_config.username | string | `"enav_config_user"` |  |
+| global.eureka.config_repo.branch | string | `"master"` |  |
+| global.eureka.config_repo.password | string | `"git_password"` |  |
+| global.eureka.config_repo.uri | string | `"https://git.com/gla-rad/eNav-Config.git"` |  |
+| global.eureka.config_repo.username | string | `"git_user"` |  |
+| ingress.annotations."nginx.ingress.kubernetes.io/rewrite-target" | string | `"/$1$2"` |  |
+| ingress.annotations."nginx.ingress.kubernetes.io/use-regex" | string | `"true"` |  |
+| ingress.className | string | `"nginx"` |  |
+| ingress.enabled | bool | `true` |  |
+| ingress.hosts[0].host | string | `"localhost"` |  |
+| ingress.hosts[0].paths[0].path | string | `"/mcp/(auth)(.*)"` |  |
+| ingress.hosts[0].paths[0].pathType | string | `"ImplementationSpecific"` |  |
+| ingress.hosts[0].paths[0].serviceName | string | `"mc-keycloak"` |  |
+| ingress.hosts[0].paths[0].servicePort | int | `8090` |  |
+| ingress.hosts[0].paths[1].path | string | `"/(mcp/mir)(.*)"` |  |
+| ingress.hosts[0].paths[1].pathType | string | `"ImplementationSpecific"` |  |
+| ingress.hosts[0].paths[1].serviceName | string | `"mc-identity-registry"` |  |
+| ingress.hosts[0].paths[1].servicePort | int | `8443` |  |
+| ingress.hosts[0].paths[2].path | string | `"/(mcp/msr)(.*)"` |  |
+| ingress.hosts[0].paths[2].pathType | string | `"ImplementationSpecific"` |  |
+| ingress.hosts[0].paths[2].serviceName | string | `"mc-service-registry"` |  |
+| ingress.hosts[0].paths[2].servicePort | int | `8444` |  |
+| ingress.hosts[0].paths[3].path | string | `"/(mcp/mms)(.*)"` |  |
+| ingress.hosts[0].paths[3].pathType | string | `"ImplementationSpecific"` |  |
+| ingress.hosts[0].paths[3].serviceName | string | `"mc-mms-router"` |  |
+| ingress.hosts[0].paths[3].servicePort | int | `8080` |  |
+| ingress.hosts[0].paths[4].path | string | `"/(mcp/mms-p2p)(.*)"` |  |
+| ingress.hosts[0].paths[4].pathType | string | `"ImplementationSpecific"` |  |
+| ingress.hosts[0].paths[4].serviceName | string | `"mc-mms-router"` |  |
+| ingress.hosts[0].paths[4].servicePort | int | `9000` |  |
+| ingress.hosts[0].paths[5].path | string | `"/(mcp/mms-edge)(.*)"` |  |
+| ingress.hosts[0].paths[5].pathType | string | `"ImplementationSpecific"` |  |
+| ingress.hosts[0].paths[5].serviceName | string | `"mc-mms-edgerouter"` |  |
+| ingress.hosts[0].paths[5].servicePort | int | `8080` |  |
+| ingress.hosts[0].paths[6].path | string | `"/(mcp/mms-edge-p2p)(.*)"` |  |
+| ingress.hosts[0].paths[6].pathType | string | `"ImplementationSpecific"` |  |
+| ingress.hosts[0].paths[6].serviceName | string | `"mc-mms-edgerouter"` |  |
+| ingress.hosts[0].paths[6].servicePort | int | `9000` |  |
+| ingress.hosts[0].paths[7].path | string | `"/mcp/ledger()(.*)"` |  |
+| ingress.hosts[0].paths[7].pathType | string | `"ImplementationSpecific"` |  |
+| ingress.hosts[0].paths[7].serviceName | string | `"mc-msr-ledger"` |  |
+| ingress.hosts[0].paths[7].servicePort | int | `8545` |  |
+| ingress.hosts[0].paths[8].path | string | `"/mcp/portal()(.*)"` |  |
+| ingress.hosts[0].paths[8].pathType | string | `"ImplementationSpecific"` |  |
+| ingress.hosts[0].paths[8].serviceName | string | `"mcp-management-portal"` |  |
+| ingress.hosts[0].paths[8].servicePort | int | `4200` |  |
+| ingress.name | string | `"mcp-ingress"` |  |
+| ingress.tls | list | `[]` |  |
+| serviceAccount.annotations | object | `{}` |  |
+| serviceAccount.automount | bool | `true` |  |
+| serviceAccount.create | bool | `true` |  |
+| serviceAccount.name | string | `""` |  |
 
-## License
-Distributed under the Apache License. See [LICENSE](./LICENSE) for more
-information.
-
-## Contact
-Nikolaos Vastardis - Nikolaos.Vastardis@gla-rad.org
+----------------------------------------------
+Autogenerated from chart metadata using [helm-docs v1.13.1](https://github.com/norwoodj/helm-docs/releases/v1.13.1)

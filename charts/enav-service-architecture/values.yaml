@@ -1,0 +1,50 @@
+# Default values for enav-service-architecture.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+global:
+  eureka:
+    config_repo:
+      uri: "https://git.com/gla-rad/eNav-Config.git"
+      branch: "master"
+      username: "git_user"
+      password: "git_password"
+  enav_service:
+    cloud_config:
+      uri: "http://enav-eureka.enav-service-architecture.svc.k8s:8761/config/"
+      branch: "master"
+      username: "enav_config_user"
+      password: "enav_config_password"
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# The ingress is defined in the top level
+ingress:
+  enabled: true
+  name: enav-ingress
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1$2
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/x-forwarded-prefix: "/enav"
+  hosts:
+    - host: "enav.authority.org"
+      paths:
+      - path: /enav/(.*)
+        pathType: ImplementationSpecific
+        serviceName: enav-api-gateway
+        servicePort: 8760
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local

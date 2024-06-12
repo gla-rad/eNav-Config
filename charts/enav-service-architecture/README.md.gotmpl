@@ -1,7 +1,8 @@
-# eNav-Config
+{{ template "chart.header" . }}
 
-A repository that includes the configuration and Helm charts for deploying the
-GLA e-Navigation Service Architecture
+{{ template "chart.description" . }}
+
+{{ template "chart.versionBadge" . }}{{ template "chart.typeBadge" . }}{{ template "chart.appVersionBadge" . }}
 
 ## What is e-Navigation
 
@@ -101,7 +102,7 @@ other without the need to establish static connections. In addition it allows
 for a very flexible monitoring of the system and optionally a shared
 configuration repository.
 
-![Figure 1: The e-Navigation Service Architecture Overview](images/enavServiceArchitecture.png)
+![Figure 1: The e-Navigation Service Architecture Overview](../../images/enavServiceArchitecture.png)
 
 The figure also illustrates that the “API Gateway” becomes available to the
 clients via a dedicated web server (nginx). This setup allows the architecture
@@ -174,15 +175,8 @@ as usernames, passwords as so on, are all encoded and marked with the
 ***{cipher}*** prefix. **BE CAREFUL**: This repository much be carefully secured
 as open access would ultimately leak all configuration secrets!
 
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to
-discuss what you would like to change.
+{{ template "chart.requirementsSection" . }}
 
-Please make sure to update tests as appropriate.
+{{ template "chart.valuesSection" . }}
 
-## License
-Distributed under the Apache License. See [LICENSE](./LICENSE) for more
-information.
-
-## Contact
-Nikolaos Vastardis - Nikolaos.Vastardis@gla-rad.org
+{{ template "helm-docs.versionFooter" . }}
