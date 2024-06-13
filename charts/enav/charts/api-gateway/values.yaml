@@ -2,11 +2,19 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+global:
+  enav_service:
+    cloud_config:
+      uri: "http://enav-eureka.enav.svc.k8s:8761/config/"
+      branch: "master"
+      username: "enav_config_user"
+      password: "enav_config_password"
+
 replicaCount: 1
 
 image:
-  repository: nginx
-  pullPolicy: IfNotPresent
+  repository: ghcr.io/gla-rad/enav-api-gateway
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
@@ -16,7 +24,7 @@ fullnameOverride: ""
 
 serviceAccount:
   # Specifies whether a service account should be created
-  create: true
+  create: false
   # Automatically mount a ServiceAccount's API credentials?
   automount: true
   # Annotations to add to the service account
@@ -41,7 +49,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8760
 
 ingress:
   enabled: false
@@ -59,6 +67,28 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
+env:
+- name: ENAV_CLOUD_CONFIG_URI
+  valueFrom:
+    configMapKeyRef:
+      name: api-gateway-config
+      key: config_endpoint
+- name: ENAV_CLOUD_CONFIG_BRANCH
+  valueFrom:
+    configMapKeyRef:
+      name: api-gateway-config
+      key: config_branch
+- name: ENAV_CLOUD_CONFIG_USERNAME
+  valueFrom:
+    secretKeyRef:
+      name: api-gateway-secrets
+      key: ENAV_CLOUD_CONFIG_USERNAME
+- name: ENAV_CLOUD_CONFIG_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: api-gateway-secrets
+      key: ENAV_CLOUD_CONFIG_PASSWORD
+
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
@@ -73,11 +103,11 @@ resources: {}
 
 livenessProbe:
   httpGet:
-    path: /
+    path: /actuator/health/liveness
     port: http
 readinessProbe:
   httpGet:
-    path: /
+    path: /actuator/health/readiness
     port: http
 
 autoscaling:

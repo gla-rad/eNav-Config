@@ -1,0 +1,25 @@
+{{ template "chart.header" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "chart.versionBadge" . }}{{ template "chart.typeBadge" . }}{{ template "chart.appVersionBadge" . }}
+
+## The e-Navigation Kafka Broker Service
+
+IALA Guideline G1114 makes reference to a Maritime Messaging Service amongst its
+value-added data processing services. In the current implementation, the
+“Message Broker” assumes this role and facilitates a geospatially-aware
+publish-subscribe communication pattern (through the use of the
+[GeoMesa](https://www.geomesa.org) library), where the senders of messages
+(publishers) do not program the messages to be send directly to a specific
+receiver (consumers). Instead, publishers submit the messages to a specific
+topic, so that all authorised services interested in that topic and the affected
+geographical location will receive them. The underlying publish-subscribe
+functionality is achieved via an [Apache Kafka](https://kafka.apache.org/)
+broker, provided by this chart.
+
+{{ template "chart.requirementsSection" . }}
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}

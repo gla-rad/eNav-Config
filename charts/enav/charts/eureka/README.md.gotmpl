@@ -1,0 +1,31 @@
+{{ template "chart.header" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "chart.versionBadge" . }}{{ template "chart.typeBadge" . }}{{ template "chart.appVersionBadge" . }}
+
+## The e-Navigation Eureka Service
+
+This is the internal component the handles the service discovery and facilitates
+the microservice inter-communication. It should not be confused with a MCP MSR
+component, as it is only focused on the discoverability of the internal
+e-Navigation Service Architecture microservices. It is based on the
+[Netflix Eureka](https://github.com/Netflix/eureka) service implementation which
+allows the registered microservices to be contacted via a simple name identifier.
+It removes the requirement for microservices to be aware of each other’s
+addresses (IP, URL) beforehand, and also supports the system scaling operation
+by allowing multiple instances of each microservice to be used according to a
+selected load-balancing strategy.
+
+The current implementation is also enriched with additional functionality that
+supports a
+[Springboot Admin](http://docs.spring-boot-admin.com/current/index.html)
+server for monitoring, as well as a
+[Spring Cloud Config](https://spring.io/projects/spring-cloud-config) server
+that provides support for externalized configuration in a distributed system.
+
+{{ template "chart.requirementsSection" . }}
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}

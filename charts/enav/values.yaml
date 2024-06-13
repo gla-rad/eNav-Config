@@ -25,7 +25,39 @@ serviceAccount:
   annotations: {}
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
-  name: ""
+  name: "enav-admin"
+
+# Keep a common admin account for all
+api-gateway:
+  serviceAccount:
+    name: "enav-admin"
+aton-admin-service:
+  serviceAccount:
+    name: "enav-admin"
+aton-service:
+  serviceAccount:
+    name: "enav-admin"
+aton-service-client:
+  serviceAccount:
+    name: "enav-admin"
+ckeeper:
+  serviceAccount:
+    name: "enav-admin"
+eureka:
+  serviceAccount:
+    name: "enav-admin"
+kafka-broker:
+  serviceAccount:
+    name: "enav-admin"
+msg-broker:
+  serviceAccount:
+    name: "enav-admin"
+vdes-controller:
+  serviceAccount:
+    name: "enav-admin"
+zookeeper:
+  serviceAccount:
+    name: "enav-admin"
 
 # The ingress is defined in the top level
 ingress:

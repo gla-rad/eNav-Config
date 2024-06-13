@@ -1,8 +1,25 @@
 # vdes-controller
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+A Helm chart for the Message-Broker GLA e-Navigation Service Architecture
 
-A Helm chart for Kubernetes
+![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
+
+## The e-Navigation VDES Controller Service
+
+The GLA identified the provision of VAtoN as one of the top priority use-cases
+for their future e-Navigation applications. The use-case requirements stated
+that the transmission must be performed over AIS/VDES, therefore the
+architecture should include a component that provides this capability.
+Consequently, the **VDES Controller** microservice was introduced, which is
+capable of interfacing with VDES modules like the CML Microcircuits VDES1000,
+using a set of predefined UDP/IP ports. The application is therefore able to
+transmit messages using the TSA/VDM (Transmit Slot Assignment/VHF Data-link
+Message) and the BBM (Broadcast Binary Message) sentence protocols. **VDES
+Controller** can receive the current VAtoN information by either polling or
+subscribing to the **AtoN Service** microservice, and translates it to the
+appropriate transmission format. For testing purposes, the service is also able
+to send AIS messages using the Ettus E320 software-defined radio USRP platform
+in a similar manner.
 
 ## Values
 

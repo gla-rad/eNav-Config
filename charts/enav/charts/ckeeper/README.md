@@ -1,8 +1,24 @@
 # ckeeper
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+A Helm chart for the CKeeper of the GLA e-Navigation Service Architecture
 
-A Helm chart for Kubernetes
+![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
+
+## The e-Navigation CKeeper Service
+
+In the GLA e-Navigation Service Architecture an additional microservice is
+required to interface with the MCP. The **Certificate Keeper** microservice has
+been designed explicitly for that purpose. It interfaces with the MCP MIR
+securely using the TLS/SSL protocol, and is able to generate a new MCP X.509
+certificate for each of the architecture elements, including the services, the
+users and of course the advertised VAtoN. The generated certificates along with
+their public/private key pairs are cached in a local microservice database, so
+that it is easier to generate signatures for the transmitted messages, as well
+as verify incoming messages based on the provided signatures. The microservice
+has an additional feature, where it can be used as a stand-alone application on
+the client side, in order to provide an easier and more robust way to verify the
+messages originating from the CSSA, especially in cases of intermittent
+connectivity.
 
 ## Values
 

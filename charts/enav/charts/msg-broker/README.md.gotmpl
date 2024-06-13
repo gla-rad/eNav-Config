@@ -1,0 +1,26 @@
+{{ template "chart.header" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "chart.versionBadge" . }}{{ template "chart.typeBadge" . }}{{ template "chart.appVersionBadge" . }}
+
+## The e-Navigation Message Broker Service
+
+IALA Guideline G1114 makes reference to a Maritime Messaging Service amongst its
+value-added data processing services. In the current implementation, the
+“Message Broker” assumes this role and facilitates a geospatially-aware
+publish-subscribe communication pattern (through the use of the
+[GeoMesa](https://www.geomesa.org) library), where the senders of messages
+(publishers) do not program the messages to be send directly to a specific
+receiver (consumers). Instead, publishers submit the messages to a specific
+topic, so that all authorised services interested in that topic and the affected
+geographical location will receive them. The topics can be defined as a
+character string representation of the message type such as “aton” or
+“aton/virtual”. The latter topic format can be used to provide a more
+fine-grained topic categorisation.
+
+{{ template "chart.requirementsSection" . }}
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}

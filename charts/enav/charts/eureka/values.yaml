@@ -2,11 +2,25 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+global:
+  eureka:
+    config_repo:
+      uri: "https://git.com/gla-rad/eNav-Config.git"
+      branch: "master"
+      username: "git_user"
+      password: "git_password"
+  enav_service:
+    cloud_config:
+      uri: "http://enav-eureka.enav.svc.k8s:8761/config/"
+      branch: "master"
+      username: "enav_config_user"
+      password: "enav_config_password"
+
 replicaCount: 1
 
 image:
-  repository: nginx
-  pullPolicy: IfNotPresent
+  repository: ghcr.io/gla-rad/enav-eureka
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
@@ -16,7 +30,7 @@ fullnameOverride: ""
 
 serviceAccount:
   # Specifies whether a service account should be created
-  create: true
+  create: false
   # Automatically mount a ServiceAccount's API credentials?
   automount: true
   # Annotations to add to the service account
@@ -41,7 +55,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8761
 
 ingress:
   enabled: false
@@ -59,6 +73,43 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
+env:
+- name: ENAV_CONFIG_REPO_URL
+  valueFrom:
+    configMapKeyRef:
+      name: eureka-config
+      key: config_repo
+- name: ENAV_CONFIG_REPO_BRANCH
+  valueFrom:
+    configMapKeyRef:
+      name: eureka-config
+      key: config_branch
+- name: ENAV_CONFIG_REPO_USERNAME
+  valueFrom:
+    secretKeyRef:
+      name: eureka-secrets
+      key: ENAV_CONFIG_REPO_USERNAME
+- name: ENAV_CONFIG_REPO_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: eureka-secrets
+      key: ENAV_CONFIG_REPO_PASSWORD
+- name: ENAV_CLOUD_CONFIG_USERNAME
+  valueFrom:
+    secretKeyRef:
+      name: service-secrets
+      key: ENAV_CLOUD_CONFIG_USERNAME
+- name: ENAV_CLOUD_CONFIG_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: service-secrets
+      key: ENAV_CLOUD_CONFIG_PASSWORD
+- name: ENAV_CONFIG_ENCRYPTION_KEY
+  valueFrom:
+    secretKeyRef:
+      name: eureka-secrets
+      key: ENAV_CONFIG_ENCRYPTION_KEY
+
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
@@ -73,11 +124,11 @@ resources: {}
 
 livenessProbe:
   httpGet:
-    path: /
+    path: /actuator/health/liveness
     port: http
 readinessProbe:
   httpGet:
-    path: /
+    path: /actuator/health/readiness
     port: http
 
 autoscaling:
@@ -88,17 +139,34 @@ autoscaling:
   # targetMemoryUtilizationPercentage: 80
 
 # Additional volumes on the output Deployment definition.
-volumes: []
-# - name: foo
-#   secret:
-#     secretName: mysecret
-#     optional: false
+volumes:
+  - name: tmp-volume
+    emptyDir: {}
+  - name: log-volume
+    emptyDir: {}
+  - name: ssl-volume
+    projected:
+      sources:
+      - secret:
+          name: eureka-secrets
+          items:
+            - key: keystore
+              path: keystore.jks
+      - secret:
+          name: eureka-secrets
+          items:
+          - key: truststore
+            path: truststore.jks
 
 # Additional volumeMounts on the output Deployment definition.
-volumeMounts: []
-# - name: foo
-#   mountPath: "/etc/foo"
-#   readOnly: true
+volumeMounts:
+  - name: tmp-volume
+    mountPath: "/tmp"
+  - name: log-volume
+    mountPath: "/var/log"
+  - name: ssl-volume
+    mountPath: "/ssl"
+    readOnly: true
 
 nodeSelector: {}
 

@@ -1,0 +1,21 @@
+{{ template "chart.header" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "chart.versionBadge" . }}{{ template "chart.typeBadge" . }}{{ template "chart.appVersionBadge" . }}
+
+## The e-Navigation API Gateway Service
+
+The “API Gateway” implements the GWY component of G1114 and acts as the entry
+point for the e-Navigation Service Architecture. Its basic function is to
+protect the internal microservices and ensure that only authenticated (whether
+through SECOM on OpenID Connect) requests are admitted. In addition, it is able
+to complement the architecture functionality by appropriately routing the
+incoming requests, providing rate limiting and throttling, and handle the client
+HTTP/HTTPS sessions if necessary.
+
+{{ template "chart.requirementsSection" . }}
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}

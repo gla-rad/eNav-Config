@@ -1,8 +1,22 @@
 # zookeeper
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+A Helm chart for the Zookeeper Service of the GLA e-Navigation Service Architecture
 
-A Helm chart for Kubernetes
+![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
+
+## The e-Navigation Zookeeper Service
+
+IALA Guideline G1114 makes reference to a Maritime Messaging Service amongst its
+value-added data processing services. In the current implementation, the
+“Message Broker” assumes this role and facilitates a geospatially-aware
+publish-subscribe communication pattern (through the use of the
+[GeoMesa](https://www.geomesa.org) library), where the senders of messages
+(publishers) do not program the messages to be send directly to a specific
+receiver (consumers). Instead, publishers submit the messages to a specific
+topic, so that all authorised services interested in that topic and the affected
+geographical location will receive them. The underlying publish-subscribe
+functionality is achieved via an [Apache Kafka](https://kafka.apache.org/)
+broker, which is supported by the zookeeper service provided by this chart.
 
 ## Values
 

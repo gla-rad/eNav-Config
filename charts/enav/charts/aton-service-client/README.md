@@ -1,8 +1,26 @@
 # aton-service-client
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+A Helm chart for the AtoN Service Client of the GLA e-Navigation Service Architecture
 
-A Helm chart for Kubernetes
+![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
+
+## The e-Navigation AtoN Service Client
+
+This is a demonstration client that can be used to test the SECOM operations
+of the original e-Navigation
+[AtoN Service](https://github.com/gla-rad/eNav-AtoNService) developed by
+GRAD. More specifically, it is able to perform a subscription to the
+AtoN Service, using the mechanism specified by SECOM. The first step in this
+process is to lookup the SECOM endpoint URL of the AtoN Service in a
+SECOM-compliant service registry. Up to this point, only communication with the
+[MCP Service Registry](https://github.com/maritimeconnectivity/ServiceRegistry)
+has been tested. Once the required AtoN Service endpoint is discovered, the AtoN
+Service Client will perform the subscription request using the X.509 certificate
+provided in the configuration. Upon successful request, it will start receiving
+the updated AtoN information in S-125 format. The data will then be presented
+onto the web-interface of the client.
+
+Note that only a simple marker with the display name will be shown.
 
 ## Values
 
