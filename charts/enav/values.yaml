@@ -3,18 +3,54 @@
 # Declare variables to be passed into your templates.
 
 global:
-  eureka:
-    config_repo:
-      uri: "https://git.com/gla-rad/eNav-Config.git"
-      branch: "master"
-      username: "git_user"
-      password: "git_password"
   enav_service:
     cloud_config:
-      uri: "http://enav-eureka.enav.svc.k8s:8761/config/"
+      url: "http://enav-eureka.enav.svc.k8s:8761/config/"
       branch: "master"
       username: "enav_config_user"
       password: "enav_config_password"
+      encryption_key: "encryption_key"
+  eureka:
+    keystore: ""
+    truststore: ""
+    config_repo:
+      url: "https://git.com/gla-rad/eNav-Config.git"
+      branch: "master"
+      username: "git_user"
+      password: "git_password"
+  api_gateway:
+    keystore: ""
+    truststore: ""
+  aton_admin_service:
+    keystore: ""
+    truststore: ""
+  aton_service:
+    keystore: ""
+    truststore: ""
+  aton_service_client:
+    keystore: ""
+    truststore: ""
+  ckeeper:
+    keystore: ""
+    truststore: ""
+  kafka_broker:
+    broker_id: "1"
+    zookeeper_url: "zookeeper.enav-service-architecture:2181"
+    advertised_listeners: "PLAINTEXT://kafka-broker.enav:9092,PLAINTEXT_HOST://localhost:19092"
+    listener_security_protocol_map: "PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
+    inter_broker_listener_name: "PLANTEXT"
+    offsets_topic_replication_factor: "1"
+    message_max_bytes: "10485760"
+    max_request_size: "10485760"
+  msg_broker:
+    keystore: ""
+    truststore: ""
+  vdes_controller:
+    keystore: ""
+    truststore: ""
+  zookeeper:
+    client_port: "2181"
+    tick_time: "2000"
 
 serviceAccount:
   # Specifies whether a service account should be created
