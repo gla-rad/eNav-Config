@@ -5,10 +5,13 @@
 global:
   enav_service:
     cloud_config:
-      uri: "http://enav-eureka.enav.svc.k8s:8761/config/"
+      url: "http://enav-eureka.enav.svc.k8s:8761/config/"
       branch: "master"
       username: "enav_config_user"
       password: "enav_config_password"
+  api_gateway:
+    keystore: ""
+    truststore: ""
 
 replicaCount: 1
 
@@ -67,6 +70,10 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
+waitForServices:
+  - serviceName: eureka
+    servicePort: 8761
+
 env:
 - name: ENAV_CLOUD_CONFIG_URI
   valueFrom:
@@ -82,12 +89,12 @@ env:
   valueFrom:
     secretKeyRef:
       name: api-gateway-secrets
-      key: ENAV_CLOUD_CONFIG_USERNAME
+      key: config_username
 - name: ENAV_CLOUD_CONFIG_PASSWORD
   valueFrom:
     secretKeyRef:
       name: api-gateway-secrets
-      key: ENAV_CLOUD_CONFIG_PASSWORD
+      key: config_password
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -118,19 +125,38 @@ autoscaling:
   # targetMemoryUtilizationPercentage: 80
 
 # Additional volumes on the output Deployment definition.
-volumes: []
-# - name: foo
-#   secret:
-#     secretName: mysecret
-#     optional: false
+volumes:
+  - name: tmp-volume
+    emptyDir: {}
+  - name: log-volume
+    emptyDir: {}
+  - name: ssl-volume
+    projected:
+      sources:
+      - secret:
+          name: api-gateway-secrets
+          items:
+            - key: keystore
+              path: keystore.jks
+      - secret:
+          name: api-gateway-secrets
+          items:
+          - key: truststore
+            path: truststore.jks
 
 # Additional volumeMounts on the output Deployment definition.
-volumeMounts: []
-# - name: foo
-#   mountPath: "/etc/foo"
-#   readOnly: true
+volumeMounts:
+  - name: tmp-volume
+    mountPath: "/tmp"
+  - name: log-volume
+    mountPath: "/var/log"
+  - name: ssl-volume
+    mountPath: "/ssl"
+    readOnly: true
 
-nodeSelector: {}
+nodeSelector: {
+   "kubernetes.io/os": linux
+}
 
 tolerations: []
 

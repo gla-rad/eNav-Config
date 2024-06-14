@@ -2,6 +2,17 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+global:
+  enav_service:
+    cloud_config:
+      url: "http://enav-eureka.enav.svc.k8s:8761/config/"
+      branch: "master"
+      username: "enav_config_user"
+      password: "enav_config_password"
+  msg_broker:
+    keystore: ""
+    truststore: ""
+
 replicaCount: 1
 
 image:
@@ -71,6 +82,32 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
+waitForServices:
+  - serviceName: eureka
+    servicePort: 8761
+
+env:
+  - name: ENAV_CLOUD_CONFIG_URI
+    valueFrom:
+      configMapKeyRef:
+        name: msg-broker-config
+        key: config_endpoint
+  - name: ENAV_CLOUD_CONFIG_BRANCH
+    valueFrom:
+      configMapKeyRef:
+        name: msg-broker-config
+        key: config_branch
+  - name: ENAV_CLOUD_CONFIG_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: msg-broker-secrets
+        key: config_username
+  - name: ENAV_CLOUD_CONFIG_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: msg-broker-secrets
+        key: config_password
+
 livenessProbe:
   httpGet:
     path: /actuator/health/liveness
@@ -89,28 +126,39 @@ autoscaling:
 
 # Additional volumes on the output Deployment definition.
 volumes:
-- secret:
-    name: msg-broker-secrets
-    items:
-      - key: keystore
-        path: keystore.jks
-- secret:
-    name: msg-broker-secrets
-    items:
-      - key: truststore
-        path: truststore.jks
+  - name: tmp-volume
+    emptyDir: {}
+  - name: log-volume
+    emptyDir: {}
+  - name: s100-exchange-set-volume
+    emptyDir: {}
+  - name: ssl-volume
+    projected:
+      sources:
+      - secret:
+          name: msg-broker-secrets
+          items:
+            - key: keystore
+              path: keystore.jks
+      - secret:
+          name: msg-broker-secrets
+          items:
+          - key: truststore
+            path: truststore.jks
 
 # Additional volumeMounts on the output Deployment definition.
 volumeMounts:
-- name: tmp-volume
-  mountPath: "/tmp"
-- name: log-volume
-  mountPath: "/var/log"
-- name: ssl-volume
-  mountPath: "/ssl"
-  readOnly: true
+  - name: tmp-volume
+    mountPath: "/tmp"
+  - name: log-volume
+    mountPath: "/var/log"
+  - name: ssl-volume
+    mountPath: "/ssl"
+    readOnly: true
 
-nodeSelector: {}
+nodeSelector: {
+  "kubernetes.io/os": linux
+}
 
 tolerations: []
 

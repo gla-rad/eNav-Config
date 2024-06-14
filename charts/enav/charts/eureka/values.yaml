@@ -3,18 +3,22 @@
 # Declare variables to be passed into your templates.
 
 global:
-  eureka:
-    config_repo:
-      uri: "https://git.com/gla-rad/eNav-Config.git"
-      branch: "master"
-      username: "git_user"
-      password: "git_password"
   enav_service:
     cloud_config:
-      uri: "http://enav-eureka.enav.svc.k8s:8761/config/"
+      url: "http://enav-eureka.enav.svc.k8s:8761/config/"
       branch: "master"
       username: "enav_config_user"
       password: "enav_config_password"
+      encryption_key: "encryption_key"
+  eureka:
+    keystore: ""
+    truststore: ""
+    config_repo:
+      url: "https://git.com/gla-rad/eNav-Config.git"
+      branch: "master"
+      username: "git_user"
+      password: "git_password"
+    
 
 replicaCount: 1
 
@@ -78,37 +82,37 @@ env:
   valueFrom:
     configMapKeyRef:
       name: eureka-config
-      key: config_repo
+      key: config_repo_url
 - name: ENAV_CONFIG_REPO_BRANCH
   valueFrom:
     configMapKeyRef:
       name: eureka-config
-      key: config_branch
+      key: config_repo_branch
 - name: ENAV_CONFIG_REPO_USERNAME
   valueFrom:
     secretKeyRef:
       name: eureka-secrets
-      key: ENAV_CONFIG_REPO_USERNAME
+      key: config_repo_username
 - name: ENAV_CONFIG_REPO_PASSWORD
   valueFrom:
     secretKeyRef:
       name: eureka-secrets
-      key: ENAV_CONFIG_REPO_PASSWORD
+      key: config_repo_password
 - name: ENAV_CLOUD_CONFIG_USERNAME
   valueFrom:
     secretKeyRef:
       name: service-secrets
-      key: ENAV_CLOUD_CONFIG_USERNAME
+      key: config_username
 - name: ENAV_CLOUD_CONFIG_PASSWORD
   valueFrom:
     secretKeyRef:
       name: service-secrets
-      key: ENAV_CLOUD_CONFIG_PASSWORD
+      key: config_password
 - name: ENAV_CONFIG_ENCRYPTION_KEY
   valueFrom:
     secretKeyRef:
       name: eureka-secrets
-      key: ENAV_CONFIG_ENCRYPTION_KEY
+      key: cloud_config
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -168,7 +172,9 @@ volumeMounts:
     mountPath: "/ssl"
     readOnly: true
 
-nodeSelector: {}
+nodeSelector: {
+   "kubernetes.io/os": linux
+}
 
 tolerations: []
 

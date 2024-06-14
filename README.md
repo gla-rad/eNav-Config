@@ -154,7 +154,7 @@ plugin installed.
 
 * An operational PostgreSQL server with existing databases installed for the
 following services. Note that since it's a bit complex to suppost persistence
-is every Kuebernetes environment (e.g. on bare-metal deployment) this method
+is every Kubernetes environment (e.g. on bare-metal deployment) this method
 was seen as preferable:
 
     * VDES-Controller

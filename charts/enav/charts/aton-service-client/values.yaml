@@ -2,11 +2,22 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+global:
+  enav_service:
+    cloud_config:
+      url: "http://enav-eureka.enav.svc.k8s:8761/config/"
+      branch: "master"
+      username: "enav_config_user"
+      password: "enav_config_password"
+  aton_service_client:
+    keystore: ""
+    truststore: ""
+
 replicaCount: 1
 
 image:
-  repository: nginx
-  pullPolicy: IfNotPresent
+  repository: ghcr.io/gla-rad/enav-aton-service-client
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
@@ -16,7 +27,7 @@ fullnameOverride: ""
 
 serviceAccount:
   # Specifies whether a service account should be created
-  create: true
+  create: false
   # Automatically mount a ServiceAccount's API credentials?
   automount: true
   # Annotations to add to the service account
@@ -41,7 +52,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8768
 
 ingress:
   enabled: false
@@ -71,13 +82,39 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
+waitForServices:
+  - serviceName: eureka
+    servicePort: 8761
+
+env:
+  - name: ENAV_CLOUD_CONFIG_URI
+    valueFrom:
+      configMapKeyRef:
+        name: aton-service-client-config
+        key: config_endpoint
+  - name: ENAV_CLOUD_CONFIG_BRANCH
+    valueFrom:
+      configMapKeyRef:
+        name: aton-service-client-config
+        key: config_branch
+  - name: ENAV_CLOUD_CONFIG_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: aton-service-client-secrets
+        key: config_username
+  - name: ENAV_CLOUD_CONFIG_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: aton-service-client-secrets
+        key: config_password
+
 livenessProbe:
   httpGet:
-    path: /
+    path: /actuator/health/liveness
     port: http
 readinessProbe:
   httpGet:
-    path: /
+    path: /actuator/health/readiness
     port: http
 
 autoscaling:
@@ -88,19 +125,38 @@ autoscaling:
   # targetMemoryUtilizationPercentage: 80
 
 # Additional volumes on the output Deployment definition.
-volumes: []
-# - name: foo
-#   secret:
-#     secretName: mysecret
-#     optional: false
+volumes:
+  - name: tmp-volume
+    emptyDir: {}
+  - name: log-volume
+    emptyDir: {}
+  - name: ssl-volume
+    projected:
+      sources:
+      - secret:
+          name: aton-service-client-secrets
+          items:
+            - key: keystore
+              path: keystore.jks
+      - secret:
+          name: aton-service-client-secrets
+          items:
+          - key: truststore
+            path: truststore.jks
 
 # Additional volumeMounts on the output Deployment definition.
-volumeMounts: []
-# - name: foo
-#   mountPath: "/etc/foo"
-#   readOnly: true
+volumeMounts:
+  - name: tmp-volume
+    mountPath: "/tmp"
+  - name: log-volume
+    mountPath: "/var/log"
+  - name: ssl-volume
+    mountPath: "/ssl"
+    readOnly: true
 
-nodeSelector: {}
+nodeSelector: {
+   "kubernetes.io/os": linux
+}
 
 tolerations: []
 

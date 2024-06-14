@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: zookeeper-config
+data:
+  client_port: {{ .Values.global.zookeeper.client_port | quote }}
+  tick_time: {{ .Values.global.zookeeper.tick_time | quote }}

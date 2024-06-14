@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vdes-controller-config
+data:
+  config_endpoint: {{ .Values.global.enav_service.cloud_config.url | quote }}
+  config_branch: {{ .Values.global.enav_service.cloud_config.branch | quote }}

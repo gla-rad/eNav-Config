@@ -2,11 +2,16 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+global:
+  zookeeper:
+    client_port: "2181"
+    tick_time: "2000"
+
 replicaCount: 1
 
 image:
-  repository: nginx
-  pullPolicy: IfNotPresent
+  repository: confluentinc/cp-zookeeper
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
@@ -16,7 +21,7 @@ fullnameOverride: ""
 
 serviceAccount:
   # Specifies whether a service account should be created
-  create: true
+  create: false
   # Automatically mount a ServiceAccount's API credentials?
   automount: true
   # Annotations to add to the service account
@@ -41,7 +46,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 2181
 
 ingress:
   enabled: false
@@ -71,14 +76,26 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
-livenessProbe:
-  httpGet:
-    path: /
-    port: http
-readinessProbe:
-  httpGet:
-    path: /
-    port: http
+env:
+  - name: KAFKA_BROKER_ID
+    valueFrom:
+      configMapKeyRef:
+        name: zookeeper-config
+        key: client_port
+  - name: KAFKA_ZOOKEEPER_CONNECT
+    valueFrom:
+      configMapKeyRef:
+        name: zookeeper-config
+        key: tick_time
+
+livenessProbe: {}
+#  httpGet:
+#    path: /
+#    port: http
+readinessProbe: {}
+#  httpGet:
+#    path: /
+#    port: http
 
 autoscaling:
   enabled: false
@@ -100,7 +117,9 @@ volumeMounts: []
 #   mountPath: "/etc/foo"
 #   readOnly: true
 
-nodeSelector: {}
+nodeSelector: {
+  "kubernetes.io/os": linux
+}
 
 tolerations: []
 
