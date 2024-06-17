@@ -1,3 +1,5 @@
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/enav-service-architecture)](https://artifacthub.io/packages/search?repo=enav-service-architecture)
+
 # eNav-Config
 
 A repository that includes the configuration and Helm charts for deploying the
