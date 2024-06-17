@@ -174,6 +174,114 @@ as usernames, passwords as so on, are all encoded and marked with the
 ***{cipher}*** prefix. **BE CAREFUL**: This repository much be carefully secured
 as open access would ultimately leak all configuration secrets!
 
+## How to install
+To install the whole e-Navigation Service Architecture in your Kubernetes
+cluster you can use this helm script.
+
+First you will need to install the enNav-Config Helm repository:
+
+```bash
+helm repo add enav-service-architecture https://gla-rad.github.io/eNav-Config/
+```
+
+And the you can install it as follows. Note that you will need to provide
+a certain configuration files. First there is the **values.yaml** which contains
+all the configuration parameters for all childern charts, but also a set of
+keystores and truststores, mainly for the keycloak and the MIR modules.
+
+IMPORTANT: All binary files need to be encoded into Base64 beforehand since
+helm will not be able to load the otherwise. Plain text configuration files
+however can be provided as they are. Also the private keys provided, need to
+be PEM encoded ECDSA keys, in PKCS1 format.
+
+```bash
+helm install grad enav-service-architecture/enav -n enav-service-architecture -f config/values.yaml \
+    --create-namespace \
+    --set-file global.mc_keycloak.keystore=config/idbroker-updater.jks.b64 \
+    --set-file global.mc_keycloak.truststore=config/root-ca-keystore.jks.b64 \
+    --set-file global.mc_identity_registry.configuration=config/application.yaml \
+    --set-file global.mc_identity_registry.keycloak_json=config/keycloak.json \
+    --set-file global.mc_identity_registry.keystore=config/subca-keystore.jks.b64 \
+    --set-file global.mc_identity_registry.truststore=config/mcp-truststore.jks.b64 \
+    --set-file global.mc_mms_router.private_key=config/router-cert-key.pkcs \
+    --set-file global.mc_mms_router.certificate=config/router-cert.pem \
+    --set-file global.mc_mms_router.certificate_key=config/router-cert-key.pkcs  \
+    --set-file global.mc_mms_router.client_ca=config/ca-chain.pem \
+    --set-file global.mc_mms_router.beacons=config/beacons.txt \
+    --set-file global.mc_mms_edge_router.certificate=config/edge-router-cert.pem \
+    --set-file global.mc_mms_edge_router.certificate_key=config/edge-router-cert-key.pkcs  \
+    --set-file global.mc_mms_edge_router.client_certificate=config/edge-router-cert.pem \
+    --set-file global.mc_mms_edge_router.client_certificate_key=config/edge-router-cert-key.pkcs \
+    --set-file global.mc_mms_edge_router.client_ca=config/ca-chain.pem
+```
+
+## Values
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| api-gateway.serviceAccount.name | string | `"enav-admin"` |  |
+| aton-admin-service.serviceAccount.name | string | `"enav-admin"` |  |
+| aton-service-client.serviceAccount.name | string | `"enav-admin"` |  |
+| aton-service.serviceAccount.name | string | `"enav-admin"` |  |
+| ckeeper.serviceAccount.name | string | `"enav-admin"` |  |
+| eureka.serviceAccount.name | string | `"enav-admin"` |  |
+| global.api_gateway.keystore | string | `""` |  |
+| global.api_gateway.truststore | string | `""` |  |
+| global.aton_admin_service.keystore | string | `""` |  |
+| global.aton_admin_service.truststore | string | `""` |  |
+| global.aton_service.keystore | string | `""` |  |
+| global.aton_service.truststore | string | `""` |  |
+| global.aton_service_client.keystore | string | `""` |  |
+| global.aton_service_client.truststore | string | `""` |  |
+| global.ckeeper.keystore | string | `""` |  |
+| global.ckeeper.truststore | string | `""` |  |
+| global.enav_service.cloud_config.branch | string | `"master"` |  |
+| global.enav_service.cloud_config.encryption_key | string | `"encryption_key"` |  |
+| global.enav_service.cloud_config.password | string | `"enav_config_password"` |  |
+| global.enav_service.cloud_config.url | string | `"http://enav-eureka.enav.svc.k8s:8761/config/"` |  |
+| global.enav_service.cloud_config.username | string | `"enav_config_user"` |  |
+| global.eureka.config_repo.branch | string | `"master"` |  |
+| global.eureka.config_repo.password | string | `"git_password"` |  |
+| global.eureka.config_repo.url | string | `"https://git.com/gla-rad/eNav-Config.git"` |  |
+| global.eureka.config_repo.username | string | `"git_user"` |  |
+| global.eureka.keystore | string | `""` |  |
+| global.eureka.truststore | string | `""` |  |
+| global.kafka_broker.advertised_listeners | string | `"PLAINTEXT://kafka-broker.enav:9092,PLAINTEXT_HOST://localhost:19092"` |  |
+| global.kafka_broker.broker_id | string | `"1"` |  |
+| global.kafka_broker.inter_broker_listener_name | string | `"PLANTEXT"` |  |
+| global.kafka_broker.listener_security_protocol_map | string | `"PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"` |  |
+| global.kafka_broker.max_request_size | string | `"10485760"` |  |
+| global.kafka_broker.message_max_bytes | string | `"10485760"` |  |
+| global.kafka_broker.offsets_topic_replication_factor | string | `"1"` |  |
+| global.kafka_broker.zookeeper_url | string | `"zookeeper.enav-service-architecture:2181"` |  |
+| global.msg_broker.keystore | string | `""` |  |
+| global.msg_broker.truststore | string | `""` |  |
+| global.vdes_controller.keystore | string | `""` |  |
+| global.vdes_controller.truststore | string | `""` |  |
+| global.zookeeper.client_port | string | `"2181"` |  |
+| global.zookeeper.tick_time | string | `"2000"` |  |
+| ingress.annotations."nginx.ingress.kubernetes.io/rewrite-target" | string | `"/$1"` |  |
+| ingress.annotations."nginx.ingress.kubernetes.io/rewrite-target" | string | `"/$1$2"` |  |
+| ingress.annotations."nginx.ingress.kubernetes.io/use-regex" | string | `"true"` |  |
+| ingress.annotations."nginx.ingress.kubernetes.io/x-forwarded-prefix" | string | `"/enav"` |  |
+| ingress.className | string | `"nginx"` |  |
+| ingress.enabled | bool | `true` |  |
+| ingress.hosts[0].host | string | `"enav.authority.org"` |  |
+| ingress.hosts[0].paths[0].path | string | `"/enav/(.*)"` |  |
+| ingress.hosts[0].paths[0].pathType | string | `"ImplementationSpecific"` |  |
+| ingress.hosts[0].paths[0].serviceName | string | `"enav-api-gateway"` |  |
+| ingress.hosts[0].paths[0].servicePort | int | `8760` |  |
+| ingress.name | string | `"enav-ingress"` |  |
+| ingress.tls | list | `[]` |  |
+| kafka-broker.serviceAccount.name | string | `"enav-admin"` |  |
+| msg-broker.serviceAccount.name | string | `"enav-admin"` |  |
+| serviceAccount.annotations | object | `{}` |  |
+| serviceAccount.automount | bool | `true` |  |
+| serviceAccount.create | bool | `true` |  |
+| serviceAccount.name | string | `"enav-admin"` |  |
+| vdes-controller.serviceAccount.name | string | `"enav-admin"` |  |
+| zookeeper.serviceAccount.name | string | `"enav-admin"` |  |
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to
 discuss what you would like to change.

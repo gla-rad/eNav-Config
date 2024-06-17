@@ -87,26 +87,26 @@ waitForServices:
     servicePort: 8761
 
 env:
-  - name: ENAV_CLOUD_CONFIG_URI
-    valueFrom:
-      configMapKeyRef:
-        name: aton-service-config
-        key: config_endpoint
-  - name: ENAV_CLOUD_CONFIG_BRANCH
-    valueFrom:
-      configMapKeyRef:
-        name: aton-service-config
-        key: config_branch
-  - name: ENAV_CLOUD_CONFIG_USERNAME
-    valueFrom:
-      secretKeyRef:
-        name: aton-service-secrets
-        key: config_username
-  - name: ENAV_CLOUD_CONFIG_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: aton-service-secrets
-        key: config_password
+- name: ENAV_CLOUD_CONFIG_URI
+  valueFrom:
+    configMapKeyRef:
+      name: aton-service-config
+      key: config_endpoint
+- name: ENAV_CLOUD_CONFIG_BRANCH
+  valueFrom:
+    configMapKeyRef:
+      name: aton-service-config
+      key: config_branch
+- name: ENAV_CLOUD_CONFIG_USERNAME
+  valueFrom:
+    secretKeyRef:
+      name: aton-service-secrets
+      key: config_username
+- name: ENAV_CLOUD_CONFIG_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: aton-service-secrets
+      key: config_password
 
 livenessProbe:
   httpGet:

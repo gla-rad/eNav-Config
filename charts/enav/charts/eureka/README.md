@@ -2,7 +2,7 @@
 
 A Helm chart for the Eureka Service of the GLA e-Navigation Service Architecture
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
+![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
 
 ## The e-Navigation Eureka Service
 
@@ -47,12 +47,12 @@ that provides support for externalized configuration in a distributed system.
 | env[3].valueFrom.secretKeyRef.name | string | `"eureka-secrets"` |  |
 | env[4].name | string | `"ENAV_CLOUD_CONFIG_USERNAME"` |  |
 | env[4].valueFrom.secretKeyRef.key | string | `"config_username"` |  |
-| env[4].valueFrom.secretKeyRef.name | string | `"service-secrets"` |  |
+| env[4].valueFrom.secretKeyRef.name | string | `"eureka-secrets"` |  |
 | env[5].name | string | `"ENAV_CLOUD_CONFIG_PASSWORD"` |  |
 | env[5].valueFrom.secretKeyRef.key | string | `"config_password"` |  |
-| env[5].valueFrom.secretKeyRef.name | string | `"service-secrets"` |  |
+| env[5].valueFrom.secretKeyRef.name | string | `"eureka-secrets"` |  |
 | env[6].name | string | `"ENAV_CONFIG_ENCRYPTION_KEY"` |  |
-| env[6].valueFrom.secretKeyRef.key | string | `"cloud_config"` |  |
+| env[6].valueFrom.secretKeyRef.key | string | `"config_encryption_key"` |  |
 | env[6].valueFrom.secretKeyRef.name | string | `"eureka-secrets"` |  |
 | fullnameOverride | string | `""` |  |
 | global.enav_service.cloud_config.branch | string | `"master"` |  |
@@ -70,12 +70,17 @@ that provides support for externalized configuration in a distributed system.
 | image.repository | string | `"ghcr.io/gla-rad/enav-eureka"` |  |
 | image.tag | string | `""` |  |
 | imagePullSecrets | list | `[]` |  |
-| ingress.annotations | object | `{}` |  |
-| ingress.className | string | `""` |  |
-| ingress.enabled | bool | `false` |  |
-| ingress.hosts[0].host | string | `"chart-example.local"` |  |
-| ingress.hosts[0].paths[0].path | string | `"/"` |  |
+| ingress.annotations."nginx.ingress.kubernetes.io/backend-protocol" | string | `"AUTO_HTTP"` |  |
+| ingress.annotations."nginx.ingress.kubernetes.io/rewrite-target" | string | `"/$1"` |  |
+| ingress.annotations."nginx.ingress.kubernetes.io/use-regex" | string | `"true"` |  |
+| ingress.className | string | `"nginx"` |  |
+| ingress.enabled | bool | `true` |  |
+| ingress.hosts[0].host | string | `"eureka.enav-service-architecture.net"` |  |
+| ingress.hosts[0].paths[0].path | string | `"/(.*)"` |  |
 | ingress.hosts[0].paths[0].pathType | string | `"ImplementationSpecific"` |  |
+| ingress.hosts[0].paths[0].serviceName | string | `"eureka"` |  |
+| ingress.hosts[0].paths[0].servicePort | int | `8761` |  |
+| ingress.name | string | `"enav-eureka-ingress"` |  |
 | ingress.tls | list | `[]` |  |
 | livenessProbe.httpGet.path | string | `"/actuator/health/liveness"` |  |
 | livenessProbe.httpGet.port | string | `"http"` |  |

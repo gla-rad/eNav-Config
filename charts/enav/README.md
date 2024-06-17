@@ -2,7 +2,7 @@
 
 A Helm chart for deploying the GLA e-Navigation Service Architecture
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
+![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
 
 ## What is e-Navigation
 
@@ -82,9 +82,9 @@ fine-grained version of SOA.
 
 ### The e-Navigation Service Architecture Overview
 
-An overview of the e-Navigation Service Architecture is presented in the
-following figure. As already mentioned this follows the IALA G1114 guideline.
-The DCT ([VDES Controller](https://github.com/gla-rad/eNav-VDESController),
+This section present a brief overview of the e-Navigation Service Architecture
+As already mentioned this follows the IALA G1114 guideline. The DCT
+([VDES Controller](https://github.com/gla-rad/eNav-VDESController),
 [Message Broker](https://github.com/gla-rad/eNav-MessageBroker)),
 VAD ([AtoN Service](https://github.com/gla-rad/eNav-AtonService),
 [AtoN Admin Service](https://github.com/gla-rad/eNav-AtonAdminService)) and UIA
@@ -102,13 +102,10 @@ other without the need to establish static connections. In addition it allows
 for a very flexible monitoring of the system and optionally a shared
 configuration repository.
 
-![Figure 1: The e-Navigation Service Architecture Overview](../../images/enavServiceArchitecture.png)
-
-The figure also illustrates that the “API Gateway” becomes available to the
-clients via a dedicated web server (nginx). This setup allows the architecture
-to expose a different SSL certificate (not generated via the MCP) and also
-permits higher flexibility where different e-Navigation systems could be served
-in parallel.
+The “API Gateway” becomes available to the clients via a dedicated web server
+(nginx). This setup allows the architecture to expose a different SSL
+certificate (not generated via the MCP) and also permits higher flexibility
+where different e-Navigation systems could be served in parallel.
 
 Microservices are typically cloud-native, which means that they can easily be
 deployed in a hosted cloud environment. This allows the architecture be scalable
@@ -127,19 +124,6 @@ server for monitoring, as well as the incorporation of the
 [Spring Cloud Config](https://spring.io/projects/spring-cloud-config) server
 with Eureka, os that it can support externalized configuration for the involved
 microservices.
-
-## Repository Structure
-
-This repository brings together mupltiple aspects of the e-Navigation Service
-Architecture configuration and deployement. Each is placed in a separate folder
-in the top level directory structure:
-
-* **charts**: Contains the definitions of Helm charts for deploying GLA the
-e-Navigation Service Architecture into Kubernetes environments.
-* **configuration**: This directory includes a set of application property files
-(either as the ***.properties*** or ***.yaml***) that will will be distributes
-to the architecture services by the Eureka service.
-* **images**: Contains a set of images used by the repository.
 
 ## Deployment Requirements
 
@@ -198,7 +182,7 @@ as open access would ultimately leak all configuration secrets!
 | global.enav_service.cloud_config.branch | string | `"master"` |  |
 | global.enav_service.cloud_config.encryption_key | string | `"encryption_key"` |  |
 | global.enav_service.cloud_config.password | string | `"enav_config_password"` |  |
-| global.enav_service.cloud_config.url | string | `"http://enav-eureka.enav.svc.k8s:8761/config/"` |  |
+| global.enav_service.cloud_config.url | string | `"http://eureka.enav:8761/config/"` |  |
 | global.enav_service.cloud_config.username | string | `"enav_config_user"` |  |
 | global.eureka.config_repo.branch | string | `"master"` |  |
 | global.eureka.config_repo.password | string | `"git_password"` |  |
@@ -208,7 +192,7 @@ as open access would ultimately leak all configuration secrets!
 | global.eureka.truststore | string | `""` |  |
 | global.kafka_broker.advertised_listeners | string | `"PLAINTEXT://kafka-broker.enav:9092,PLAINTEXT_HOST://localhost:19092"` |  |
 | global.kafka_broker.broker_id | string | `"1"` |  |
-| global.kafka_broker.inter_broker_listener_name | string | `"PLANTEXT"` |  |
+| global.kafka_broker.inter_broker_listener_name | string | `"PLAINTEXT"` |  |
 | global.kafka_broker.listener_security_protocol_map | string | `"PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"` |  |
 | global.kafka_broker.max_request_size | string | `"10485760"` |  |
 | global.kafka_broker.message_max_bytes | string | `"10485760"` |  |
@@ -220,8 +204,8 @@ as open access would ultimately leak all configuration secrets!
 | global.vdes_controller.truststore | string | `""` |  |
 | global.zookeeper.client_port | string | `"2181"` |  |
 | global.zookeeper.tick_time | string | `"2000"` |  |
+| ingress.annotations."nginx.ingress.kubernetes.io/backend-protocol" | string | `"AUTO_HTTP"` |  |
 | ingress.annotations."nginx.ingress.kubernetes.io/rewrite-target" | string | `"/$1"` |  |
-| ingress.annotations."nginx.ingress.kubernetes.io/rewrite-target" | string | `"/$1$2"` |  |
 | ingress.annotations."nginx.ingress.kubernetes.io/use-regex" | string | `"true"` |  |
 | ingress.annotations."nginx.ingress.kubernetes.io/x-forwarded-prefix" | string | `"/enav"` |  |
 | ingress.className | string | `"nginx"` |  |
@@ -229,7 +213,7 @@ as open access would ultimately leak all configuration secrets!
 | ingress.hosts[0].host | string | `"enav.authority.org"` |  |
 | ingress.hosts[0].paths[0].path | string | `"/enav/(.*)"` |  |
 | ingress.hosts[0].paths[0].pathType | string | `"ImplementationSpecific"` |  |
-| ingress.hosts[0].paths[0].serviceName | string | `"enav-api-gateway"` |  |
+| ingress.hosts[0].paths[0].serviceName | string | `"api-gateway"` |  |
 | ingress.hosts[0].paths[0].servicePort | int | `8760` |  |
 | ingress.name | string | `"enav-ingress"` |  |
 | ingress.tls | list | `[]` |  |

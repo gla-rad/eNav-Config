@@ -2,7 +2,7 @@
 
 A Helm chart for the API Gateway Service of the GLA e-Navigation Service Architecture
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
+![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
 
 ## The e-Navigation API Gateway Service
 
@@ -40,7 +40,7 @@ HTTP/HTTPS sessions if necessary.
 | global.api_gateway.truststore | string | `""` |  |
 | global.enav_service.cloud_config.branch | string | `"master"` |  |
 | global.enav_service.cloud_config.password | string | `"enav_config_password"` |  |
-| global.enav_service.cloud_config.url | string | `"http://enav-eureka.enav.svc.k8s:8761/config/"` |  |
+| global.enav_service.cloud_config.url | string | `"http://eureka.enav:8761/config/"` |  |
 | global.enav_service.cloud_config.username | string | `"enav_config_user"` |  |
 | image.pullPolicy | string | `"Always"` |  |
 | image.repository | string | `"ghcr.io/gla-rad/enav-api-gateway"` |  |
@@ -53,15 +53,11 @@ HTTP/HTTPS sessions if necessary.
 | ingress.hosts[0].paths[0].path | string | `"/"` |  |
 | ingress.hosts[0].paths[0].pathType | string | `"ImplementationSpecific"` |  |
 | ingress.tls | list | `[]` |  |
-| livenessProbe.httpGet.path | string | `"/actuator/health/liveness"` |  |
-| livenessProbe.httpGet.port | string | `"http"` |  |
 | nameOverride | string | `""` |  |
 | nodeSelector."kubernetes.io/os" | string | `"linux"` |  |
 | podAnnotations | object | `{}` |  |
 | podLabels | object | `{}` |  |
 | podSecurityContext | object | `{}` |  |
-| readinessProbe.httpGet.path | string | `"/actuator/health/readiness"` |  |
-| readinessProbe.httpGet.port | string | `"http"` |  |
 | replicaCount | int | `1` |  |
 | resources | object | `{}` |  |
 | securityContext | object | `{}` |  |

@@ -82,9 +82,9 @@ fine-grained version of SOA.
 
 ### The e-Navigation Service Architecture Overview
 
-An overview of the e-Navigation Service Architecture is presented in the
-following figure. As already mentioned this follows the IALA G1114 guideline.
-The DCT ([VDES Controller](https://github.com/gla-rad/eNav-VDESController),
+This section present a brief overview of the e-Navigation Service Architecture 
+As already mentioned this follows the IALA G1114 guideline. The DCT
+([VDES Controller](https://github.com/gla-rad/eNav-VDESController),
 [Message Broker](https://github.com/gla-rad/eNav-MessageBroker)),
 VAD ([AtoN Service](https://github.com/gla-rad/eNav-AtonService),
 [AtoN Admin Service](https://github.com/gla-rad/eNav-AtonAdminService)) and UIA
@@ -102,13 +102,10 @@ other without the need to establish static connections. In addition it allows
 for a very flexible monitoring of the system and optionally a shared
 configuration repository.
 
-![Figure 1: The e-Navigation Service Architecture Overview](../../images/enavServiceArchitecture.png)
-
-The figure also illustrates that the “API Gateway” becomes available to the
-clients via a dedicated web server (nginx). This setup allows the architecture
-to expose a different SSL certificate (not generated via the MCP) and also
-permits higher flexibility where different e-Navigation systems could be served
-in parallel.
+The “API Gateway” becomes available to the clients via a dedicated web server
+(nginx). This setup allows the architecture to expose a different SSL
+certificate (not generated via the MCP) and also permits higher flexibility
+where different e-Navigation systems could be served in parallel.
 
 Microservices are typically cloud-native, which means that they can easily be
 deployed in a hosted cloud environment. This allows the architecture be scalable
@@ -127,19 +124,6 @@ server for monitoring, as well as the incorporation of the
 [Spring Cloud Config](https://spring.io/projects/spring-cloud-config) server
 with Eureka, os that it can support externalized configuration for the involved
 microservices.
-
-## Repository Structure
-
-This repository brings together mupltiple aspects of the e-Navigation Service
-Architecture configuration and deployement. Each is placed in a separate folder
-in the top level directory structure:
-
-* **charts**: Contains the definitions of Helm charts for deploying GLA the
-e-Navigation Service Architecture into Kubernetes environments.
-* **configuration**: This directory includes a set of application property files
-(either as the ***.properties*** or ***.yaml***) that will will be distributes 
-to the architecture services by the Eureka service.
-* **images**: Contains a set of images used by the repository.
 
 ## Deployment Requirements
 

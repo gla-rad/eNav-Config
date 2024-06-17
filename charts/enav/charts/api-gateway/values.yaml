@@ -5,7 +5,7 @@
 global:
   enav_service:
     cloud_config:
-      url: "http://enav-eureka.enav.svc.k8s:8761/config/"
+      url: "http://eureka.enav:8761/config/"
       branch: "master"
       username: "enav_config_user"
       password: "enav_config_password"
@@ -108,14 +108,14 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
-livenessProbe:
-  httpGet:
-    path: /actuator/health/liveness
-    port: http
-readinessProbe:
-  httpGet:
-    path: /actuator/health/readiness
-    port: http
+# livenessProbe:
+#   httpGet:
+#     path: /actuator/health/liveness
+#     port: http
+# readinessProbe:
+#   httpGet:
+#     path: /actuator/health/readiness
+#     port: http
 
 autoscaling:
   enabled: false

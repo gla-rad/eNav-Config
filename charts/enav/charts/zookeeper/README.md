@@ -2,7 +2,7 @@
 
 A Helm chart for the Zookeeper Service of the GLA e-Navigation Service Architecture
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
+![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
 
 ## The e-Navigation Zookeeper Service
 
@@ -27,10 +27,10 @@ broker, which is supported by the zookeeper service provided by this chart.
 | autoscaling.maxReplicas | int | `100` |  |
 | autoscaling.minReplicas | int | `1` |  |
 | autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
-| env[0].name | string | `"KAFKA_BROKER_ID"` |  |
+| env[0].name | string | `"ZOOKEEPER_CLIENT_PORT"` |  |
 | env[0].valueFrom.configMapKeyRef.key | string | `"client_port"` |  |
 | env[0].valueFrom.configMapKeyRef.name | string | `"zookeeper-config"` |  |
-| env[1].name | string | `"KAFKA_ZOOKEEPER_CONNECT"` |  |
+| env[1].name | string | `"ZOOKEEPER_TICK_TIME"` |  |
 | env[1].valueFrom.configMapKeyRef.key | string | `"tick_time"` |  |
 | env[1].valueFrom.configMapKeyRef.name | string | `"zookeeper-config"` |  |
 | fullnameOverride | string | `""` |  |
@@ -47,13 +47,11 @@ broker, which is supported by the zookeeper service provided by this chart.
 | ingress.hosts[0].paths[0].path | string | `"/"` |  |
 | ingress.hosts[0].paths[0].pathType | string | `"ImplementationSpecific"` |  |
 | ingress.tls | list | `[]` |  |
-| livenessProbe | object | `{}` |  |
 | nameOverride | string | `""` |  |
 | nodeSelector."kubernetes.io/os" | string | `"linux"` |  |
 | podAnnotations | object | `{}` |  |
 | podLabels | object | `{}` |  |
 | podSecurityContext | object | `{}` |  |
-| readinessProbe | object | `{}` |  |
 | replicaCount | int | `1` |  |
 | resources | object | `{}` |  |
 | securityContext | object | `{}` |  |

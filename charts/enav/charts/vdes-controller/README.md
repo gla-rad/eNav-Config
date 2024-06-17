@@ -2,7 +2,7 @@
 
 A Helm chart for the Message-Broker GLA e-Navigation Service Architecture
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
+![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
 
 ## The e-Navigation VDES Controller Service
 
@@ -37,10 +37,10 @@ in a similar manner.
 | env[1].valueFrom.configMapKeyRef.key | string | `"config_branch"` |  |
 | env[1].valueFrom.configMapKeyRef.name | string | `"vdes-controller-config"` |  |
 | env[2].name | string | `"ENAV_CLOUD_CONFIG_USERNAME"` |  |
-| env[2].valueFrom.secretKeyRef.key | string | `"ENAV_CLOUD_CONFIG_USERNAME"` |  |
+| env[2].valueFrom.secretKeyRef.key | string | `"config_username"` |  |
 | env[2].valueFrom.secretKeyRef.name | string | `"vdes-controller-secrets"` |  |
 | env[3].name | string | `"ENAV_CLOUD_CONFIG_PASSWORD"` |  |
-| env[3].valueFrom.secretKeyRef.key | string | `"ENAV_CLOUD_CONFIG_PASSWORD"` |  |
+| env[3].valueFrom.secretKeyRef.key | string | `"config_password"` |  |
 | env[3].valueFrom.secretKeyRef.name | string | `"vdes-controller-secrets"` |  |
 | fullnameOverride | string | `""` |  |
 | global.enav_service.cloud_config.branch | string | `"master"` |  |

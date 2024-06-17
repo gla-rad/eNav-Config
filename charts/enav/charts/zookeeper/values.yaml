@@ -77,22 +77,22 @@ resources: {}
   #   memory: 128Mi
 
 env:
-  - name: KAFKA_BROKER_ID
+  - name: ZOOKEEPER_CLIENT_PORT
     valueFrom:
       configMapKeyRef:
         name: zookeeper-config
         key: client_port
-  - name: KAFKA_ZOOKEEPER_CONNECT
+  - name: ZOOKEEPER_TICK_TIME
     valueFrom:
       configMapKeyRef:
         name: zookeeper-config
         key: tick_time
 
-livenessProbe: {}
+#livenessProbe: 
 #  httpGet:
 #    path: /
 #    port: http
-readinessProbe: {}
+#readinessProbe: {}
 #  httpGet:
 #    path: /
 #    port: http

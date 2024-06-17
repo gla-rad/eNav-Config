@@ -8,7 +8,7 @@ global:
     zookeeper_url: "zookeeper.enav-service-architecture:2181"
     advertised_listeners: "PLAINTEXT://kafka-broker.enav:9092,PLAINTEXT_HOST://localhost:19092"
     listener_security_protocol_map: "PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
-    inter_broker_listener_name: "PLANTEXT"
+    inter_broker_listener_name: "PLAINTEXT"
     offsets_topic_replication_factor: "1"
     message_max_bytes: "10485760"
     max_request_size: "10485760"
@@ -124,11 +124,11 @@ env:
         name: kafka-broker-config
         key: max_request_size
 
-livenessProbe: {}
+#livenessProbe:
 #  httpGet:
 #    path: /
 #    port: http
-readinessProbe: {}
+#readinessProbe:
 #  httpGet:
 #    path: /
 #    port: http

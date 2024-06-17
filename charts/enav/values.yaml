@@ -5,7 +5,7 @@
 global:
   enav_service:
     cloud_config:
-      url: "http://enav-eureka.enav.svc.k8s:8761/config/"
+      url: "http://eureka.enav:8761/config/"
       branch: "master"
       username: "enav_config_user"
       password: "enav_config_password"
@@ -38,7 +38,7 @@ global:
     zookeeper_url: "zookeeper.enav-service-architecture:2181"
     advertised_listeners: "PLAINTEXT://kafka-broker.enav:9092,PLAINTEXT_HOST://localhost:19092"
     listener_security_protocol_map: "PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
-    inter_broker_listener_name: "PLANTEXT"
+    inter_broker_listener_name: "PLAINTEXT"
     offsets_topic_replication_factor: "1"
     message_max_bytes: "10485760"
     max_request_size: "10485760"
@@ -101,7 +101,7 @@ ingress:
   name: enav-ingress
   className: nginx
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1$2
+    nginx.ingress.kubernetes.io/backend-protocol: "AUTO_HTTP"
     nginx.ingress.kubernetes.io/rewrite-target: /$1
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/x-forwarded-prefix: "/enav"
@@ -110,7 +110,7 @@ ingress:
       paths:
       - path: /enav/(.*)
         pathType: ImplementationSpecific
-        serviceName: enav-api-gateway
+        serviceName: api-gateway
         servicePort: 8760
   tls: []
   #  - secretName: chart-example-tls

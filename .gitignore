@@ -26,3 +26,6 @@ replay_pid*
 # Various tools
 helm-docs
 kubeconform
+
+# The configuration directory
+config

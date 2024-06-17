@@ -2,7 +2,7 @@
 
 A Helm chart for the Kafka Broker of the GLA e-Navigation Service Architecture
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
+![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
 
 ## The e-Navigation Kafka Broker Service
 
@@ -54,7 +54,7 @@ broker, provided by this chart.
 | fullnameOverride | string | `""` |  |
 | global.kafka_broker.advertised_listeners | string | `"PLAINTEXT://kafka-broker.enav:9092,PLAINTEXT_HOST://localhost:19092"` |  |
 | global.kafka_broker.broker_id | string | `"1"` |  |
-| global.kafka_broker.inter_broker_listener_name | string | `"PLANTEXT"` |  |
+| global.kafka_broker.inter_broker_listener_name | string | `"PLAINTEXT"` |  |
 | global.kafka_broker.listener_security_protocol_map | string | `"PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"` |  |
 | global.kafka_broker.max_request_size | string | `"10485760"` |  |
 | global.kafka_broker.message_max_bytes | string | `"10485760"` |  |
@@ -71,13 +71,11 @@ broker, provided by this chart.
 | ingress.hosts[0].paths[0].path | string | `"/"` |  |
 | ingress.hosts[0].paths[0].pathType | string | `"ImplementationSpecific"` |  |
 | ingress.tls | list | `[]` |  |
-| livenessProbe | object | `{}` |  |
 | nameOverride | string | `""` |  |
 | nodeSelector."kubernetes.io/os" | string | `"linux"` |  |
 | podAnnotations | object | `{}` |  |
 | podLabels | object | `{}` |  |
 | podSecurityContext | object | `{}` |  |
-| readinessProbe | object | `{}` |  |
 | replicaCount | int | `1` |  |
 | resources | object | `{}` |  |
 | securityContext | object | `{}` |  |
