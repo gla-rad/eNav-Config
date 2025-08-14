@@ -35,12 +35,12 @@ global:
     truststore: ""
   kafka_broker:
     broker_id: "1"
-    advertised_listeners: "PLAINTEXT://kafka-broker.enav:9092,PLAINTEXT_HOST://localhost:19092"
+    advertised_listeners: "PLAINTEXT://enav-kafka-broker.enav-service-architecture:9092,PLAINTEXT_HOST://localhost:19092"
     listener_security_protocol_map: "PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT,CONTROLLER:PLAINTEXT"
     process_roles: "broker,controller"
     node_id: "1"
     controller_quorum_voters: "1@localhost:29093"
-    kafka_listeners: "PLAINTEXT://kafka-broker.enav:9092,CONTROLLER://localhost:29093,PLAINTEXT_HOST://0.0.0.0:19092"
+    kafka_listeners: "PLAINTEXT://0.0.0.0:9092,CONTROLLER://localhost:29093,PLAINTEXT_HOST://0.0.0.0:19092"
     inter_broker_listener_name: "PLAINTEXT"
     controller_listener_name: "CONTROLLER"
     cluster_id: "R3JhZElzVGhlQmVzdA"
@@ -53,9 +53,7 @@ global:
   vdes_controller:
     keystore: ""
     truststore: ""
-  zookeeper:
-    client_port: "2181"
-    tick_time: "2000"
+
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -94,9 +92,6 @@ msg-broker:
   serviceAccount:
     name: "enav-admin"
 vdes-controller:
-  serviceAccount:
-    name: "enav-admin"
-zookeeper:
   serviceAccount:
     name: "enav-admin"
 
