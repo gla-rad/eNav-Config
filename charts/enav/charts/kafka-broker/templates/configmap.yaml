@@ -4,10 +4,15 @@ metadata:
   name: kafka-broker-config
 data:
   broker_id: {{ .Values.global.kafka_broker.broker_id | quote }}
-  zookeeper_url: {{ .Values.global.kafka_broker.zookeeper_url | quote }}
   advertised_listeners:  {{ .Values.global.kafka_broker.advertised_listeners | quote }}
   listener_security_protocol_map:  {{ .Values.global.kafka_broker.listener_security_protocol_map | quote }}
+  process_roles: {{ .Values.global.kafka_broker.process_roles | quote }}
+  node_id: {{ .Values.global.kafka_broker.node_id | quote }}
+  controller_quorum_voters: {{ .Values.global.kafka_broker.controller_quorum_voters | quote }}
+  kafka_listeners: {{ .Values.global.kafka_broker.kafka_listeners | quote }}
   inter_broker_listener_name:  {{ .Values.global.kafka_broker.inter_broker_listener_name | quote }}
+  controller_listener_name: {{ .Values.global.kafka_broker.controller_listener_name | quote }}
+  cluster_id: {{ .Values.global.kafka_broker.cluster_id | quote }}
   offsets_topic_replication_factor:  {{ .Values.global.kafka_broker.offsets_topic_replication_factor | quote }}
   message_max_bytes:  {{ .Values.global.kafka_broker.message_max_bytes | quote }}
   max_request_size:  {{ .Values.global.kafka_broker.max_request_size | quote }}
