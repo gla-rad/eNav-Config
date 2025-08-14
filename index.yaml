@@ -3,6 +3,16 @@ entries:
   enav:
   - apiVersion: v2
     appVersion: latest
+    created: "2025-08-14T13:07:18.161091527Z"
+    description: A Helm chart for deploying the GLA e-Navigation Service Architecture
+    digest: c75aaa3eb3bae00f3d55ef97d9f8499acfa4314141408e1ab89d4d1935f7ff16
+    name: enav
+    type: application
+    urls:
+    - https://github.com/gla-rad/eNav-Config/releases/download/enav-0.0.3/enav-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v2
+    appVersion: latest
     created: "2024-06-17T11:55:30.787665471Z"
     description: A Helm chart for deploying the GLA e-Navigation Service Architecture
     digest: ade2c683f32a964b4865ac309a17629e5c277541643a47eef2fb4c0470172058
@@ -21,4 +31,4 @@ entries:
     urls:
     - https://github.com/gla-rad/eNav-Config/releases/download/enav-0.0.1/enav-0.0.1.tgz
     version: 0.0.1
-generated: "2024-06-17T11:55:30.787680158Z"
+generated: "2025-08-14T13:07:18.161107387Z"
