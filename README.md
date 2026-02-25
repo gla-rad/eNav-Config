@@ -50,7 +50,7 @@ Human‐Machine‐Interface (HMI) to the primary users of the CSSA.
 parties.
 
 To ensure the secure communication between ship and CSSA, the International
-Electrotechnical Commission (IEC), in coordination with IALA, compiled a set of
+Electrotechnical Commission (IEC), in line with IALA, compiled a set of
 system architecture and operational requirements for e-Navigation into a
 standard better known as [SECOM](https://webstore.iec.ch/publication/64543).
 This provides mechanisms for secure data exchange, as well as a TS interface
@@ -197,7 +197,7 @@ however can be provided as they are. Also the private keys provided, need to
 be PEM encoded ECDSA keys, in PKCS1 format.
 
 ```bash
-helm install grad enav-service-architecture/enav -n enav-service-architecture -f config/values.yaml \
+helm install genavd enav-service-architecture/enav -n enav-service-architecture -f config/values.yaml \
     --create-namespace \
     --set-file global.mc_keycloak.keystore=config/idbroker-updater.jks.b64 \
     --set-file global.mc_keycloak.truststore=config/root-ca-keystore.jks.b64 \
@@ -215,6 +215,13 @@ helm install grad enav-service-architecture/enav -n enav-service-architecture -f
     --set-file global.mc_mms_edge_router.client_certificate=config/edge-router-cert.pem \
     --set-file global.mc_mms_edge_router.client_certificate_key=config/edge-router-cert-key.pkcs \
     --set-file global.mc_mms_edge_router.client_ca=config/ca-chain.pem
+```
+
+To upgrade the version of the chart without changing the installed values you 
+can simply use the following command:
+
+```bash
+helm upgrade enav enav-service-architecture/enav -n enav-service-architecture --reuse-values
 ```
 
 ## Values

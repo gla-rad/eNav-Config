@@ -21,7 +21,7 @@ global:
 replicaCount: 1
 
 image:
-  repository: confluentinc/cp-kafka
+  repository: apache/kafka
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
