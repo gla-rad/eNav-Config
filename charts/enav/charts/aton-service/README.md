@@ -2,7 +2,7 @@
 
 A Helm chart for the AtoN Service of the GLA e-Navigation Service Architecture
 
-![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
+![Version: 0.0.3](https://img.shields.io/badge/Version-0.0.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: latest](https://img.shields.io/badge/AppVersion-latest-informational?style=flat-square)
 
 ## The e-Navigation AtoN Service
 
@@ -76,6 +76,10 @@ SECOM subscription operation.
 | serviceAccount.automount | bool | `true` |  |
 | serviceAccount.create | bool | `false` |  |
 | serviceAccount.name | string | `""` |  |
+| startupProbe.failureThreshold | int | `15` |  |
+| startupProbe.httpGet.path | string | `"/actuator/health"` |  |
+| startupProbe.httpGet.port | string | `"http"` |  |
+| startupProbe.periodSeconds | int | `10` |  |
 | tolerations | list | `[]` |  |
 | volumeMounts[0].mountPath | string | `"/tmp"` |  |
 | volumeMounts[0].name | string | `"tmp-volume"` |  |
