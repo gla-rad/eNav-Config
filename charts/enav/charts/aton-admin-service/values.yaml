@@ -116,6 +116,12 @@ readinessProbe:
   httpGet:
     path: /actuator/health/readiness
     port: http
+startupProbe:
+  httpGet:
+    path: /actuator/health
+    port: http
+  failureThreshold: 15
+  periodSeconds: 10
 
 autoscaling:
   enabled: false
